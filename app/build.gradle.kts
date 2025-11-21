@@ -73,4 +73,7 @@ dependencies {
     // Navigation components
     implementation(libs.nav.fragment)
     implementation(libs.nav.ui)
+
+    compileOnly("org.projectlombok:lombok:1.18.42")
+    annotationProcessor("org.projectlombok:lombok:1.18.42")
 }
