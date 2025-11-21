@@ -1,5 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
+    id("org.jetbrains.kotlin.android")
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -41,4 +43,34 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
+
+    implementation(platform(libs.firebase.bom))
+
+    implementation(libs.firebase.auth)
+    implementation(libs.firebase.firestore)
+    implementation(libs.firebase.storage)
+    implementation(libs.firebase.messaging)
+
+    // Room local db
+    implementation(libs.room.runtime)
+    annotationProcessor(libs.room.compiler)
+
+    // AndroidX + UI
+    implementation(libs.material)
+    implementation(libs.recyclerview)
+
+    // AndroidX Lifecycle
+    implementation(libs.lifecycle.viewmodel)
+    implementation(libs.lifecycle.livedata)
+
+    // WorkManager – background tasks
+    implementation(libs.work.runtime)
+
+    // Glide
+    implementation(libs.glide)
+    annotationProcessor(libs.glide.compiler)
+
+    // Navigation components
+    implementation(libs.nav.fragment)
+    implementation(libs.nav.ui)
 }
