@@ -9,8 +9,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.redditcloneapp.R;
-import com.example.redditcloneapp.infrastructure.local.SharedPreferencesDatabase;
-import com.example.redditcloneapp.ui.login.LoginActivity;
+import com.example.redditcloneapp.ui.auth.LoginActivity;
 import com.example.redditcloneapp.util.SharedPreferencesHelper;
 
 public class IntroActivity extends AppCompatActivity {
