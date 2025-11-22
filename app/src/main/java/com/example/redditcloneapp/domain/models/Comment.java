@@ -10,6 +10,9 @@ import lombok.experimental.FieldNameConstants;
 @NoArgsConstructor
 @FieldNameConstants
 public class Comment {
+
+    public String COLLECTION_NAME = "Comments";
+
     private String id;
     private String postId;
     private String userId;

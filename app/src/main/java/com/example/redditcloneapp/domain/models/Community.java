@@ -11,6 +11,9 @@ import lombok.experimental.FieldNameConstants;
 @NoArgsConstructor
 @FieldNameConstants
 public class Community {
+
+    public static String COLLECTION_NAME = "Communities";
+
     private String id;
     private String name;
     private String description;
