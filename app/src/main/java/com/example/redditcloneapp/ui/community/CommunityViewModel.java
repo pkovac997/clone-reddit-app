@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.example.redditcloneapp.domain.models.Community;
 import com.example.redditcloneapp.infrastructure.firebase.community.CommunityRepository;
+import com.example.redditcloneapp.infrastructure.firebase.common.DbCallback;
 
 import java.util.List;
 
@@ -22,10 +23,9 @@ public class CommunityViewModel extends ViewModel {
     }
 
     public void loadCommunities() {
-        // prvo emituje loading stanje
         uiState.setValue(CommunityUiState.loading());
 
-        repository.getAllCommunities(new CommunityRepository.CommunitiesCallback() {
+        repository.getAllCommunities(new DbCallback<>() {
             @Override
             public void onSuccess(List<Community> communities) {
                 uiState.postValue(CommunityUiState.success(communities));

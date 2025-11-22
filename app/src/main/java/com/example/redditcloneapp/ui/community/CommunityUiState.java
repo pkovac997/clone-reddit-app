@@ -13,7 +13,9 @@ public class CommunityUiState {
     private final List<Community> communities;
     private final String errorMessage;
 
-    public CommunityUiState(boolean loading, List<Community> communities, String errorMessage) {
+    public CommunityUiState(boolean loading,
+                            List<Community> communities,
+                            String errorMessage) {
         this.loading = loading;
         this.communities = communities;
         this.errorMessage = errorMessage;

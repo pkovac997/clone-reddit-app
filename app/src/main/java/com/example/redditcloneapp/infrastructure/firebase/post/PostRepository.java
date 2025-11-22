@@ -2,36 +2,26 @@ package com.example.redditcloneapp.infrastructure.firebase.post;
 
 import com.example.redditcloneapp.domain.models.Post;
 import com.example.redditcloneapp.infrastructure.firebase.FirebaseDataSource;
+import com.example.redditcloneapp.infrastructure.firebase.common.AbstractFirebaseDataSource;
+import com.example.redditcloneapp.infrastructure.firebase.common.DbCallback;
 
 import java.util.List;
 
-public class PostRepository {
-
-    private final FirebaseDataSource dataSource;
-
-    public interface PostsCallback {
-        void onSuccess(List<Post> posts);
-        void onError(Exception e);
-    }
-
-    public interface CreatePostCallback {
-        void onSuccess(Post createdPost);
-        void onError(Exception e);
-    }
+public class PostRepository extends AbstractFirebaseDataSource {
 
     public PostRepository() {
         this.dataSource = new FirebaseDataSource();
     }
 
-    public void getAllPosts(PostsCallback callback) {
+    public void getAllPosts(DbCallback<List<Post>> callback) {
         dataSource.getAllPosts(callback);
     }
 
-    public void getPostsForCommunity(String communityId, PostsCallback callback) {
+    public void getPostsForCommunity(String communityId, DbCallback<List<Post>> callback) {
         dataSource.getPostsForCommunity(communityId, callback);
     }
 
-    public void createPost(Post post, CreatePostCallback callback) {
+    public void createPost(Post post, DbCallback<Post> callback) {
         dataSource.createPost(post, callback);
     }
 }

@@ -1,4 +1,4 @@
-package com.example.redditcloneapp.ui.feed;
+package com.example.redditcloneapp.ui.post;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -21,13 +21,13 @@ import com.example.redditcloneapp.ui.adapter.post.PostAdapter;
 
 import java.util.List;
 
-public class FeedFragment extends Fragment {
+public class PostActivity extends Fragment {
     private RecyclerView rvPosts;
     private ProgressBar progressBar;
     private TextView tvEmpty;
 
     private PostAdapter adapter;
-    private FeedViewModel viewModel;
+    private PostViewModel viewModel;
 
     @Nullable
     @Override
@@ -62,7 +62,7 @@ public class FeedFragment extends Fragment {
     }
 
     private void setupViewModel() {
-        viewModel = new ViewModelProvider(this).get(FeedViewModel.class);
+        viewModel = new ViewModelProvider(this).get(PostViewModel.class);
 
         viewModel.getUiState().observe(getViewLifecycleOwner(), uiState -> {
             if (uiState == null) {

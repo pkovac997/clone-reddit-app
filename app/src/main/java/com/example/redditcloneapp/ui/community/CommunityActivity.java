@@ -1,27 +1,21 @@
 package com.example.redditcloneapp.ui.community;
 
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.redditcloneapp.R;
-import com.example.redditcloneapp.domain.models.Community;
 import com.example.redditcloneapp.ui.adapter.community.CommunityAdapter;
 
-import java.util.List;
-
-public class CommunityFragment extends Fragment {
+public class CommunityActivity  extends AppCompatActivity {
     private RecyclerView rvCommunities;
     private ProgressBar progressBar;
     private TextView tvEmpty;
@@ -29,32 +23,27 @@ public class CommunityFragment extends Fragment {
     private CommunityAdapter adapter;
     private CommunityViewModel viewModel;
 
-    @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_communities);
 
-        View view = inflater.inflate(R.layout.fragment_communities, container, false);
-
-        initViews(view);
+        initViews();
         setupRecyclerView();
         setupViewModel();
-
-        return view;
     }
 
-    private void initViews(View view) {
-        rvCommunities = view.findViewById(R.id.rvCommunities);
-        progressBar = view.findViewById(R.id.progressBar);
-        tvEmpty = view.findViewById(R.id.tvEmpty);
+    private void initViews() {
+        rvCommunities = findViewById(R.id.rvCommunities);
+        progressBar = findViewById(R.id.progressBarCommunities);
+        tvEmpty = findViewById(R.id.tvCommunitiesEmpty);
     }
 
     private void setupRecyclerView() {
-        rvCommunities.setLayoutManager(new LinearLayoutManager(getContext()));
+        rvCommunities.setLayoutManager(new LinearLayoutManager(this));
         adapter = new CommunityAdapter(community -> {
-            // TODO: handle community click (open details, posts, etc.)
-            Toast.makeText(getContext(),
+            // TODO: open community details / posts
+            Toast.makeText(this,
                     "Clicked: " + community.getName(),
                     Toast.LENGTH_SHORT).show();
         });
@@ -64,32 +53,30 @@ public class CommunityFragment extends Fragment {
     private void setupViewModel() {
         viewModel = new ViewModelProvider(this).get(CommunityViewModel.class);
 
-        viewModel.getUiState().observe(getViewLifecycleOwner(), uiState -> {
+        viewModel.getUiState().observe(this, uiState -> {
             if (uiState == null) return;
 
-            // Loading
+            // loading
             progressBar.setVisibility(uiState.isLoading() ? View.VISIBLE : View.GONE);
 
-            // Error
+            // error
             if (uiState.getErrorMessage() != null) {
-                Toast.makeText(getContext(),
+                Toast.makeText(this,
                         "Failed to load communities: " + uiState.getErrorMessage(),
                         Toast.LENGTH_LONG).show();
             }
 
-            // Data
-            List<Community> communities = uiState.getCommunities();
-            if (communities == null || communities.isEmpty()) {
+            // data
+            if (uiState.getCommunities() == null || uiState.getCommunities().isEmpty()) {
                 tvEmpty.setVisibility(View.VISIBLE);
                 rvCommunities.setVisibility(View.GONE);
             } else {
                 tvEmpty.setVisibility(View.GONE);
                 rvCommunities.setVisibility(View.VISIBLE);
-                adapter.setItems(communities);
+                adapter.setItems(uiState.getCommunities());
             }
         });
 
-        // prvi put učitavanje
         viewModel.loadCommunities();
     }
 }
