@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.redditcloneapp.R;
+import com.example.redditcloneapp.databinding.ItemPostBinding;
 import com.example.redditcloneapp.domain.models.Post;
 
 import java.util.ArrayList;
@@ -18,8 +19,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostViewHolder> {
         void onPostClick(Post post);
     }
 
-    private List<Post> items = new ArrayList<>();
     private final OnPostClickListener listener;
+    private List<Post> items = new ArrayList<>();
 
     public PostAdapter(OnPostClickListener listener) {
         this.listener = listener;
@@ -33,10 +34,9 @@ public class PostAdapter extends RecyclerView.Adapter<PostViewHolder> {
     @NonNull
     @Override
     public PostViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater
-                .from(parent.getContext())
-                .inflate(R.layout.item_post, parent, false);
-        return new PostViewHolder(view);
+        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+        ItemPostBinding binding = ItemPostBinding.inflate(inflater, parent, false);
+        return new PostViewHolder(binding);
     }
 
     @Override

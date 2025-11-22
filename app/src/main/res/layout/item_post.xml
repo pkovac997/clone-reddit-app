@@ -4,40 +4,97 @@
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginVertical="8dp"
+    android:layout_marginVertical="6dp"
+    android:layout_marginHorizontal="8dp"
     card_view:cardCornerRadius="12dp"
-    card_view:cardElevation="4dp">
+    card_view:cardElevation="2dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="12dp"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="12dp">
 
+        <!-- 🔵 HEADER ROW: icon + community name + date -->
+        <LinearLayout
+            android:id="@+id/layoutHeader"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <!-- Community icon -->
+            <ImageView
+                android:id="@+id/ivCommunityIcon"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:src="@android:drawable/ic_menu_share"
+                android:background="@drawable/bg_circle_avatar"
+                android:padding="6dp"
+                android:contentDescription="Community icon" />
+
+            <!-- Community name -->
+            <TextView
+                android:id="@+id/tvCommunityName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="r/community"
+                android:textStyle="bold"
+                android:textSize="14sp"
+                android:layout_marginStart="10dp"/>
+
+            <!-- Dot separator -->
+            <TextView
+                android:id="@+id/dotSeparator"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="·"
+                android:textSize="12sp"
+                android:textColor="#666666"
+                android:layout_marginStart="6dp"
+                android:layout_marginEnd="6dp"/>
+
+            <!-- Date/time -->
+            <TextView
+                android:id="@+id/tvPostTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="2h ago"
+                android:textSize="13sp"
+                android:textColor="#777777" />
+
+        </LinearLayout>
+
+        <!-- 🟦 SECOND ROW: username -->
+        <TextView
+            android:id="@+id/tvUsername"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="u/userId"
+            android:textSize="13sp"
+            android:textColor="#666666"
+            android:layout_marginTop="4dp"/>
+
+        <!-- 🔶 TITLE -->
         <TextView
             android:id="@+id/tvPostTitle"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Post title"
+            android:textSize="17sp"
             android:textStyle="bold"
-            android:textSize="18sp" />
+            android:layout_marginTop="10dp"/>
 
+        <!-- CONTENT (preview) -->
         <TextView
             android:id="@+id/tvPostContent"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Short content..."
-            android:maxLines="3"
+            android:text="Post text preview..."
+            android:textSize="14sp"
+            android:maxLines="4"
             android:ellipsize="end"
-            android:layout_marginTop="4dp" />
-
-        <TextView
-            android:id="@+id/tvPostVotes"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="0 up • 0 down"
-            android:textSize="12sp"
-            android:layout_marginTop="8dp" />
+            android:layout_marginTop="6dp"/>
 
     </LinearLayout>
 

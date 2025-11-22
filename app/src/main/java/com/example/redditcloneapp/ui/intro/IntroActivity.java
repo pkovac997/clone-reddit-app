@@ -23,13 +23,10 @@ public class IntroActivity extends AppCompatActivity {
 
         getStartedButton = findViewById(R.id.getStartedButton);
 
-        getStartedButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                SharedPreferencesHelper.setIntroShown(IntroActivity.this, true);
-                startActivity(new Intent(IntroActivity.this, LoginActivity.class));
-                finish();
-            }
+        getStartedButton.setOnClickListener(view -> {
+            SharedPreferencesHelper.setIntroShown(IntroActivity.this, true);
+            startActivity(new Intent(IntroActivity.this, LoginActivity.class));
+            finish();
         });
 
     }

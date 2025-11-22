@@ -1,39 +1,45 @@
 package com.example.redditcloneapp.ui.adapter.post;
 
-import android.view.View;
-import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.redditcloneapp.R;
+import com.example.redditcloneapp.databinding.ItemPostBinding;
 import com.example.redditcloneapp.domain.models.Post;
+import com.example.redditcloneapp.util.TimeUtil;
 
 public class PostViewHolder extends RecyclerView.ViewHolder {
-    private final TextView tvTitle;
-    private final TextView tvContent;
-    private final TextView tvVotes;
 
-    public PostViewHolder(@NonNull View itemView) {
-        super(itemView);
-        tvTitle = itemView.findViewById(R.id.tvPostTitle);
-        tvContent = itemView.findViewById(R.id.tvPostContent);
-        tvVotes = itemView.findViewById(R.id.tvPostVotes);
+    private final ItemPostBinding binding;
+
+    public PostViewHolder(@NonNull ItemPostBinding binding) {
+        super(binding.getRoot());
+
+        this.binding = binding;
     }
 
     public void bind(Post post, PostAdapter.OnPostClickListener listener) {
-        tvTitle.setText(post.getTitle());
-        tvContent.setText(post.getContent());
 
-        int upvotes = post.getUserUpvotes() != null ? post.getUserUpvotes().size() : 0;
-        int downvotes = post.getUserDownvotes() != null ? post.getUserDownvotes().size() : 0;
+        // Community header
+        binding.tvCommunityName.setText("r/" + post.getCommunityId());
 
-        tvVotes.setText(upvotes + " up • " + downvotes + " down");
+        // Date
+        if (post.getCreatedAt() != null) {
+            String timeAgo = TimeUtil.formatTimeAgo(post.getCreatedAt());
+            binding.tvPostTime.setText("· " + timeAgo);
+        } else {
+            binding.tvPostTime.setText("");
+        }
 
+        // User info
+        binding.tvUsername.setText("u/" + post.getUserId());
+
+        // Title & content
+        binding.tvPostTitle.setText(post.getTitle());
+        binding.tvPostContent.setText(post.getContent());
+
+        // Click on whole card
         itemView.setOnClickListener(v -> {
-            if (listener != null) {
-                listener.onPostClick(post);
-            }
+            if (listener != null) listener.onPostClick(post);
         });
     }
 }
