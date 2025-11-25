@@ -1,101 +1,161 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cardPost"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginVertical="6dp"
-    android:layout_marginHorizontal="8dp"
-    card_view:cardCornerRadius="12dp"
-    card_view:cardElevation="2dp">
+    android:layout_marginHorizontal="4dp"
+    app:cardUseCompatPadding="true"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="2dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="12dp">
+        android:orientation="horizontal"
+        android:padding="8dp">
 
-        <!-- 🔵 HEADER ROW: icon + community name + date -->
+        <!-- Leva kolona: upvote / downvote -->
         <LinearLayout
-            android:id="@+id/layoutHeader"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical">
+            android:id="@+id/layoutVotes"
+            android:layout_width="40dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center_horizontal">
 
-            <!-- Community icon -->
-            <ImageView
-                android:id="@+id/ivCommunityIcon"
+            <ImageButton
+                android:id="@+id/btnUpvote"
                 android:layout_width="28dp"
                 android:layout_height="28dp"
-                android:src="@android:drawable/ic_menu_share"
-                android:background="@drawable/bg_circle_avatar"
-                android:padding="6dp"
-                android:contentDescription="Community icon" />
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:padding="2dp"
+                android:contentDescription="Upvote"
+                android:src="@drawable/ic_upvote" />
 
-            <!-- Community name -->
             <TextView
-                android:id="@+id/tvCommunityName"
+                android:id="@+id/tvScore"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="r/community"
+                android:text="0"
                 android:textStyle="bold"
-                android:textSize="14sp"
-                android:layout_marginStart="10dp"/>
-
-            <!-- Dot separator -->
-            <TextView
-                android:id="@+id/dotSeparator"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="·"
                 android:textSize="12sp"
-                android:textColor="#666666"
-                android:layout_marginStart="6dp"
-                android:layout_marginEnd="6dp"/>
+                android:layout_marginVertical="4dp" />
 
-            <!-- Date/time -->
-            <TextView
-                android:id="@+id/tvPostTime"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="2h ago"
-                android:textSize="13sp"
-                android:textColor="#777777" />
-
+            <ImageButton
+                android:id="@+id/btnDownvote"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:padding="2dp"
+                android:contentDescription="Downvote"
+                android:src="@drawable/ic_downvote" />
         </LinearLayout>
 
-        <!-- 🟦 SECOND ROW: username -->
-        <TextView
-            android:id="@+id/tvUsername"
-            android:layout_width="wrap_content"
+        <!-- Desna kolona: sadržaj posta -->
+        <LinearLayout
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="u/userId"
-            android:textSize="13sp"
-            android:textColor="#666666"
-            android:layout_marginTop="4dp"/>
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:paddingStart="6dp"
+            android:paddingEnd="3dp">
 
-        <!-- 🔶 TITLE -->
-        <TextView
-            android:id="@+id/tvPostTitle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Post title"
-            android:textSize="17sp"
-            android:textStyle="bold"
-            android:layout_marginTop="10dp"/>
+            <!-- gornji red: community + user -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
 
-        <!-- CONTENT (preview) -->
-        <TextView
-            android:id="@+id/tvPostContent"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Post text preview..."
-            android:textSize="14sp"
-            android:maxLines="4"
-            android:ellipsize="end"
-            android:layout_marginTop="6dp"/>
+                <TextView
+                    android:id="@+id/tvCommunity"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="c/community"
+                    android:textStyle="bold"
+                    android:textSize="13sp" />
 
+                <TextView
+                    android:id="@+id/tvUser"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="u/username"
+                    android:textSize="12sp" />
+
+                <!-- opcioni razdelnik / vreme kasnije -->
+                <!--
+                <TextView
+                    android:id="@+id/tvPostTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="· 1h"
+                    android:textSize="12sp" />
+                -->
+            </LinearLayout>
+
+            <!-- Naslov posta -->
+            <TextView
+                android:id="@+id/tvPostTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="Post title"
+                android:textStyle="bold"
+                android:textSize="18sp" />
+
+            <!-- Tekst posta -->
+            <TextView
+                android:id="@+id/tvPostContent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:text="Post content..."
+                android:textSize="15sp"
+                android:maxLines="2"
+                android:ellipsize="end" />
+
+            <!-- Donji red: komentari, share itd. -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <ImageButton
+                    android:id="@+id/btnComments"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="Comments"
+                    android:src="@drawable/comment_24px" />
+
+                <TextView
+                    android:id="@+id/tvCommentsCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:text="0 comments"
+                    android:textSize="12sp" />
+
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <ImageButton
+                    android:id="@+id/btnShare"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="Share"
+                    android:src="@drawable/share_24px" />
+            </LinearLayout>
+        </LinearLayout>
     </LinearLayout>
 
-</androidx.cardview.widget.CardView>
+</com.google.android.material.card.MaterialCardView>

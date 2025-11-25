@@ -11,11 +11,12 @@ import lombok.experimental.FieldNameConstants;
 @FieldNameConstants
 public class Comment {
 
-    public String COLLECTION_NAME = "Comments";
+    public static String COLLECTION_NAME = "Comments";
 
     private String id;
     private String postId;
     private String userId;
+    private String username;
     private String text;
     private Date createdAt;
 }

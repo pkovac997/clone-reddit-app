@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/nav_feed"
+        android:title="Feed" />
+
+    <item
+        android:id="@+id/nav_communities"
+        android:title="Communities" />
+
+    <item
+        android:id="@+id/nav_followers"
+        android:title="Followers" />
+
+    <item
+        android:id="@+id/nav_profile"
+        android:title="Profile" />
+
+    <item
+        android:id="@+id/nav_settings"
+        android:title="Settings" />
+
+</menu>

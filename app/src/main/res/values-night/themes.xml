@@ -5,4 +5,8 @@
         <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
         <item name="android:windowFullscreen">false</item>
     </style>
+
+    <style name="Theme.RedditCloneApp" parent="Theme.Material3.Dark.NoActionBar">
+    </style>
+
 </resources>

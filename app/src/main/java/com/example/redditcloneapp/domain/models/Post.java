@@ -18,9 +18,12 @@ public class Post {
     private String title;
     private String content;
     private String communityId;
+    private String communityName;
     private String userId;
+    private String userUsername;
     private List<String> imageUrls;
     private List<String> userUpvotes;
     private List<String> userDownvotes;
     private Date createdAt;
+    private List<String> comments;
 }

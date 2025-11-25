@@ -1,0 +1,9 @@
+package com.example.redditcloneapp.model.exception.database;
+
+import com.example.redditcloneapp.model.OperationType;
+
+public class EntityNotValidException extends Exception {
+    public EntityNotValidException(Class collection, String message) {
+        super("Db exception over: " + collection.getName() + " | Stack trace: " + message);
+    }
+}

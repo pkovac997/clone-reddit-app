@@ -12,17 +12,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.RedditCloneApp">
 
-        <activity android:name=".ui.intro.IntroActivity" />
-        <activity android:name=".ui.auth.LoginActivity" />
         <activity android:name=".ui.auth.RegisterActivity" />
+        <activity android:name=".ui.auth.LoginActivity" />
         <activity android:name=".ui.main.MainActivity" />
-
-        <activity
-            android:name=".LauncherActivity"
-            android:exported="true">
+        <activity android:name=".ui.intro.IntroActivity" android:exported="true">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
 

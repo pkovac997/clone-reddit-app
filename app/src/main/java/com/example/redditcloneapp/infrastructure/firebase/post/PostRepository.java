@@ -21,6 +21,14 @@ public class PostRepository extends AbstractFirebaseDataSource {
         dataSource.getPostsForCommunity(communityId, callback);
     }
 
+    public void getPostById(String postId, DbCallback<Post> callback) {
+        dataSource.getPostById(postId, callback);
+    }
+
+    public void getPostByCommunityFromUserId(String userId, DbCallback<List<Post>> callback) {
+        dataSource.getPostByCommunityFromUserId(userId, callback);
+    }
+
     public void createPost(Post post, DbCallback<Post> callback) {
         dataSource.createPost(post, callback);
     }

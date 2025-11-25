@@ -2,67 +2,113 @@ package com.example.redditcloneapp.ui.main;
 
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
+import androidx.activity.OnBackPressedCallback;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
+import androidx.core.view.GravityCompat;
 
 import com.example.redditcloneapp.R;
-import com.example.redditcloneapp.ui.main.fragments.CommunitiesFragment;
-import com.example.redditcloneapp.ui.main.fragments.HomeFragment;
-import com.example.redditcloneapp.ui.main.fragments.ProfileFragment;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.example.redditcloneapp.databinding.ActivityMainBinding;
+import com.example.redditcloneapp.ui.community.CommunitiesFragment;
+import com.example.redditcloneapp.ui.feed.FeedFragment;
+import com.example.redditcloneapp.ui.profile.ProfileFragment;
+
 
 public class MainActivity extends AppCompatActivity {
 
-    private BottomNavigationView bottomNavigation;
+    private ActivityMainBinding binding;
+    private ActionBarDrawerToggle drawerToggle;
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
-        bottomNavigation = findViewById(R.id.bottomNavigation);
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
-        setupBottomNavigation();
+        setupToolbarAndDrawer();
+        setupNavigationView();
+
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
+                    binding.drawerLayout.closeDrawer(GravityCompat.START);
+                } else {
+                    setEnabled(false); // allow normal back behavior
+                    getOnBackPressedDispatcher().onBackPressed();
+                }
+            }
+        });
 
         if (savedInstanceState == null) {
-            bottomNavigation.setSelectedItemId(R.id.menu_home);
-            loadFragment(new HomeFragment());
+            // default: Feed
+            openFeed();
+            binding.navigationView.setCheckedItem(R.id.nav_feed);
         }
     }
 
-    private void setupBottomNavigation() {
-        bottomNavigation.setOnItemSelectedListener(item -> {
-            Fragment fragment = null;
+    private void setupToolbarAndDrawer() {
+        setSupportActionBar(binding.topAppBar);
 
-            int itemId = item.getItemId();
+        drawerToggle = new ActionBarDrawerToggle(
+                this,
+                binding.drawerLayout,
+                binding.topAppBar,
+                R.string.nav_open,
+                R.string.nav_close
+        );
+        binding.drawerLayout.addDrawerListener(drawerToggle);
+        drawerToggle.syncState();
 
-            if (itemId == R.id.menu_home) {
-                fragment = new HomeFragment();
-            }
-
-            if (itemId == R.id.menu_communities) {
-                fragment = new CommunitiesFragment();
-            }
-
-            if (itemId == R.id.menu_profile) {
-                fragment = new ProfileFragment();
-            }
-
-            if (fragment != null) {
-                loadFragment(fragment);
+        binding.topAppBar.setOnMenuItemClickListener(item -> {
+            if (item.getItemId() == R.id.action_search) {
+                // TODO: open search UI
                 return true;
             }
-
             return false;
         });
     }
 
-    private void loadFragment(@NonNull Fragment fragment) {
+    private void setupNavigationView() {
+        binding.navigationView.setNavigationItemSelectedListener(item -> {
+            int id = item.getItemId();
+            if (id == R.id.nav_feed) {
+                openFeed();
+            } else if (id == R.id.nav_communities) {
+                openCommunities();
+            } else if (id == R.id.nav_followers) {
+                // TODO: open Followers fragment
+            } else if (id == R.id.nav_profile) {
+                openProfile();
+            } else if (id == R.id.nav_settings) {
+                // TODO: open Settings fragment
+            }
+
+            binding.drawerLayout.closeDrawers();
+            return true;
+        });
+    }
+
+    private void openFeed() {
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.fragmentContainer, fragment)
+                .replace(R.id.fragmentContainer, new FeedFragment())
+                .commit();
+    }
+
+    private void openCommunities() {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragmentContainer, new CommunitiesFragment())
+                .commit();
+    }
+
+    private void openProfile() {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragmentContainer, new ProfileFragment())
                 .commit();
     }
 }
+

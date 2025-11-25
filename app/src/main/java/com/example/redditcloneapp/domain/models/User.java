@@ -12,7 +12,7 @@ import lombok.experimental.FieldNameConstants;
 @FieldNameConstants
 public class User {
 
-    public String COLLECTION_NAME = "Users";
+    public static String COLLECTION_NAME = "Users";
 
     private String id;
     private String email;

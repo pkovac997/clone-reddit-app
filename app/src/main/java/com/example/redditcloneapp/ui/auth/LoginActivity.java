@@ -3,98 +3,66 @@ package com.example.redditcloneapp.ui.auth;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.redditcloneapp.R;
+import com.example.redditcloneapp.databinding.ActivityLoginBinding;
 import com.example.redditcloneapp.ui.main.MainActivity;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private EditText etEmail, etPassword;
-    private Button btnLogin;
-    private TextView tvGoToRegister;
-    private ProgressBar progressBar;
-
-    private final FirebaseAuth auth = FirebaseAuth.getInstance();;
+    private ActivityLoginBinding binding;
+    private FirebaseAuth auth;
 
     @Override
-    protected void onStart() {
-        super.onStart();
-        FirebaseUser currentUser = auth.getCurrentUser();
-        if (currentUser != null) {
-            goToMain();
-        }
-    }
-
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
 
-        etEmail = findViewById(R.id.etEmail);
-        etPassword = findViewById(R.id.etPassword);
-        btnLogin = findViewById(R.id.btnLogin);
-        tvGoToRegister = findViewById(R.id.tvGoToRegister);
-        progressBar = findViewById(R.id.progressBar);
+        binding = ActivityLoginBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
-        btnLogin.setOnClickListener(view -> loginUser());
+        auth = FirebaseAuth.getInstance();
 
-        tvGoToRegister.setOnClickListener(view ->
-                startActivity(new Intent(LoginActivity.this, RegisterActivity.class)));
+        binding.btnLogin.setOnClickListener(v -> onLoginClicked());
+        binding.tvGoToRegister.setOnClickListener(v -> {
+            Intent i = new Intent(this, RegisterActivity.class);
+            startActivity(i);
+        });
     }
 
-    private void loginUser() {
-        String email = etEmail.getText().toString().trim();
-        String password = etPassword.getText().toString().trim();
+    private void onLoginClicked() {
+        String email = binding.etEmail.getText().toString().trim();
+        String password = binding.etPassword.getText().toString().trim();
 
-        if (TextUtils.isEmpty(email)) {
-            etEmail.setError("Email is required.");
+        if (TextUtils.isEmpty(email) || TextUtils.isEmpty(password)) {
+            Toast.makeText(this, "Email and password are required", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        if (TextUtils.isEmpty(password)) {
-            etPassword.setError("Password is required.");
-            return;
-        }
-
-        showLoading(true);
+        binding.btnLogin.setEnabled(false);
 
         auth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(task -> {
-                    showLoading(false);
+                .addOnCompleteListener(this, task -> {
+                    binding.btnLogin.setEnabled(true);
 
                     if (task.isSuccessful()) {
-                        Toast.makeText(this, "Successfully logged in.", Toast.LENGTH_SHORT).show();
-                        goToMain();
+                        Toast.makeText(this, "Login successful", Toast.LENGTH_SHORT).show();
+                        openMain();
                     } else {
-                        Toast.makeText(this,
-                                "Error occurred: " + task.getException().getMessage(),
-                                Toast.LENGTH_LONG).show();
+                        String message = "Login failed";
+                        if (task.getException() != null && task.getException().getMessage() != null) {
+                            message = task.getException().getMessage();
+                        }
+                        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
                     }
                 });
     }
 
-    private void goToMain() {
-        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
-        finish();
+    private void openMain() {
+        Intent i = new Intent(this, MainActivity.class);
+        startActivity(i);
+        finish(); // da se ne vraca na login pritiskom na back
     }
-
-    private void showLoading(boolean loading) {
-        progressBar.setVisibility(loading ? View.VISIBLE : View.GONE);
-        btnLogin.setEnabled(!loading);
-        tvGoToRegister.setEnabled(!loading);
-    }
-
 }

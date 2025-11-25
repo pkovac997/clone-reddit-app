@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="nav_open">Expand</string>
+    <string name="nav_close">Close</string>
+    <string name="select_community">Select community</string>
+    <string name="reddit_clone_app_title">Reddit Clone App</string>
+</resources>
