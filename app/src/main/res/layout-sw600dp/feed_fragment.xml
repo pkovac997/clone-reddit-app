@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     android:padding="16dp">
 
-    <!-- Centralna kolona koja izgleda lepo na širokim ekranima -->
     <LinearLayout
         android:id="@+id/feedContentContainer"
         android:layout_width="700dp"
@@ -15,7 +14,6 @@
         android:orientation="vertical"
         android:padding="8dp">
 
-        <!-- Create Post Card (isti kao na telefonu, samo lepše “diše”) -->
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/cardCreatePost"
             android:layout_width="match_parent"
@@ -24,7 +22,6 @@
             app:cardCornerRadius="12dp"
             app:cardElevation="2dp">
 
-            <!-- ovde može da ide tvoj postojeći sadržaj create-post kartice 1:1 -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -36,7 +33,6 @@
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- RecyclerView feed-a -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvFeed"
             android:layout_width="match_parent"

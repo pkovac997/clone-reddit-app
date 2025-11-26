@@ -9,7 +9,7 @@ import androidx.annotation.NonNull;
 
 public class ImageHelper {
 
-    public static boolean isImageFileExists(@NonNull Uri uri, Context context) {
+    public static boolean isImageFileExists(@NonNull Uri uri) {
         try {
             java.io.File file = new java.io.File(uri.getPath());
             return file.exists() && file.isFile();

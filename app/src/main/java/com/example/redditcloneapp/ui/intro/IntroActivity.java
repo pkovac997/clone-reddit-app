@@ -29,7 +29,6 @@ public class IntroActivity extends AppCompatActivity {
 
         auth = FirebaseAuth.getInstance();
 
-        // If already logged in, you can skip intro entirely:
         if (auth.getCurrentUser() != null) {
             openMain();
             finish();

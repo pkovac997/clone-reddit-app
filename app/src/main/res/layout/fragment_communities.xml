@@ -5,7 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!-- Sadržaj koji skroluje (dve sekcije) -->
     <androidx.core.widget.NestedScrollView
         android:id="@+id/scrollCommunities"
         android:layout_width="match_parent"
@@ -19,12 +18,11 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <!-- Sekcija: Communities to follow -->
             <TextView
                 android:id="@+id/tvCommunitiesToFollowTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Communities to follow"
+                android:text="@string/communities_to_follow"
                 android:textStyle="bold"
                 android:textSize="16sp"
                 android:layout_marginBottom="4dp" />
@@ -33,11 +31,10 @@
                 android:id="@+id/tvCommunitiesToFollowSubtitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Discover new communities you might like"
+                android:text="@string/discover_new_communities_you_might_like"
                 android:textSize="12sp"
                 android:layout_marginBottom="8dp" />
 
-            <!-- Horizontalni list community-ja koje user NE prati -->
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvCommunitiesToFollow"
                 android:layout_width="match_parent"
@@ -45,12 +42,11 @@
                 android:overScrollMode="never"
                 android:layout_marginBottom="16dp" />
 
-            <!-- Sekcija: Communities you follow -->
             <TextView
                 android:id="@+id/tvCommunitiesYouFollowTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Communities you follow"
+                android:text="@string/communities_you_follow"
                 android:textStyle="bold"
                 android:textSize="16sp"
                 android:layout_marginBottom="4dp" />
@@ -59,11 +55,10 @@
                 android:id="@+id/tvCommunitiesYouFollowSubtitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Manage the communities you are following"
+                android:text="@string/manage_the_communities_you_are_following"
                 android:textSize="12sp"
                 android:layout_marginBottom="8dp" />
 
-            <!-- Vertikalni list community-ja koje user prati -->
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvCommunitiesYouFollow"
                 android:layout_width="match_parent"
@@ -73,14 +68,13 @@
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
-    <!-- FAB: Create community (za sada samo view) -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabCreateCommunity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="16dp"
-        android:contentDescription="Create community"
+        android:contentDescription="@string/create_community"
         app:srcCompat="@drawable/ic_add" />
 
     <androidx.cardview.widget.CardView

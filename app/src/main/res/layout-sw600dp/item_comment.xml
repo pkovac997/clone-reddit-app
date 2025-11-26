@@ -17,7 +17,6 @@
         android:orientation="horizontal"
         android:padding="16dp">
 
-        <!-- Veći avatar za tablet -->
         <TextView
             android:id="@+id/tvAvatar"
             android:layout_width="40dp"
@@ -30,7 +29,6 @@
             android:layout_marginEnd="12dp"
             android:layout_gravity="center_vertical" />
 
-        <!-- Desni deo: user + tekst -->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"

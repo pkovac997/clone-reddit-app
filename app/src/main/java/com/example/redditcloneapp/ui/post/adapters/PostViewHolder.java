@@ -41,7 +41,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
 
             try {
                 Uri uri = Uri.parse(firstImage);
-                if (!ImageHelper.isImageFileExists(uri, itemView.getContext())) {
+                if (!ImageHelper.isImageFileExists(uri)) {
                     throw new Exception("Image doesn't exist");
                 }
                 binding.cardPostImage.setVisibility(View.VISIBLE);

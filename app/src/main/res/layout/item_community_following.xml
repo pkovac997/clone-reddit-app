@@ -17,7 +17,6 @@
         android:orientation="vertical"
         android:padding="12dp">
 
-        <!-- Community Name -->
         <TextView
             android:id="@+id/tvCommunityName"
             android:layout_width="match_parent"
@@ -27,7 +26,6 @@
             android:textSize="16sp"
             android:textColor="?attr/colorOnSurface" />
 
-        <!-- Description -->
         <TextView
             android:id="@+id/tvCommunityDescription"
             android:layout_width="match_parent"
@@ -37,7 +35,6 @@
             android:layout_marginTop="4dp"
             android:textColor="?attr/colorOnSurfaceVariant" />
 
-        <!-- Followers count -->
         <TextView
             android:id="@+id/tvCommunityFollowers"
             android:layout_width="wrap_content"
@@ -47,7 +44,6 @@
             android:layout_marginTop="6dp"
             android:textColor="?attr/colorOnSurfaceVariant" />
 
-        <!-- Unfollow Button -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnUnfollow"
             style="?attr/materialButtonOutlinedStyle"

@@ -22,7 +22,6 @@ public class CommentViewHolder extends RecyclerView.ViewHolder {
         binding.tvCommentUser.setText("u/" + username);
         binding.tvCommentText.setText(comment.getText());
 
-        // ako imaš tvAvatar:
         if (binding.tvAvatar != null) {
             char first = username.isEmpty() ? 'U' : Character.toUpperCase(username.charAt(0));
             binding.tvAvatar.setText(String.valueOf(first));

@@ -26,12 +26,10 @@ public class CommunityToFollowViewHolder extends RecyclerView.ViewHolder {
                 : 0;
         binding.tvCommunityFollowers.setText(followersCount + " followers");
 
-        // klik na celu karticu
         binding.getRoot().setOnClickListener(v -> {
             if (listener != null) listener.onCommunityClick(community);
         });
 
-        // klik na Follow dugme
         binding.btnFollow.setOnClickListener(v -> {
             if (listener != null) listener.onFollowClick(community);
         });

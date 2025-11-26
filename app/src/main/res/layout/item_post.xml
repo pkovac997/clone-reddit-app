@@ -19,7 +19,6 @@
         android:orientation="horizontal"
         android:padding="10dp">
 
-        <!-- Leva kolona: upvote / downvote -->
         <LinearLayout
             android:id="@+id/layoutVotes"
             android:layout_width="40dp"
@@ -55,7 +54,6 @@
                 android:src="@drawable/ic_downvote" />
         </LinearLayout>
 
-        <!-- Desna kolona: sadržaj posta -->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -64,7 +62,6 @@
             android:paddingStart="8dp"
             android:paddingEnd="4dp">
 
-            <!-- gornji red: community + user -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -97,7 +94,6 @@
                     android:alpha="0.7" />
             </LinearLayout>
 
-            <!-- Naslov posta -->
             <TextView
                 android:id="@+id/tvPostTitle"
                 android:layout_width="match_parent"
@@ -109,7 +105,6 @@
                 android:maxLines="2"
                 android:ellipsize="end" />
 
-            <!-- Tekst posta -->
             <TextView
                 android:id="@+id/tvPostContent"
                 android:layout_width="match_parent"
@@ -121,7 +116,6 @@
                 android:maxLines="3"
                 android:ellipsize="end" />
 
-            <!-- Slika u card-u sa zaobljenim ivicama -->
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardPostImage"
                 android:layout_width="match_parent"
@@ -141,7 +135,6 @@
                     android:adjustViewBounds="true" />
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- Donji razdvojnik -->
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
@@ -149,7 +142,6 @@
                 android:alpha="0.08"
                 android:background="?attr/colorOnSurface" />
 
-            <!-- Donji red: komentari, share itd. -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

@@ -13,7 +13,7 @@
         android:orientation="vertical"
         android:layout_gravity="center_horizontal">
 
-        <!-- Card sa osnovnim info o community-ju -->
+
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/cardCommunityInfo"
             android:layout_width="match_parent"
@@ -64,7 +64,6 @@
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- Naslov za listu postova -->
         <TextView
             android:id="@+id/tvPostsHeader"
             android:layout_width="wrap_content"
@@ -74,7 +73,6 @@
             android:textSize="18sp"
             android:layout_marginBottom="12dp" />
 
-        <!-- Lista postova iz community-ja -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvCommunityPosts"
             android:layout_width="match_parent"

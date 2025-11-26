@@ -16,7 +16,6 @@
         android:orientation="horizontal"
         android:padding="8dp">
 
-        <!-- mali "avatar" sa početnim slovom usera (opciono) -->
         <TextView
             android:id="@+id/tvAvatar"
             android:layout_width="32dp"
@@ -30,7 +29,6 @@
             android:layout_marginEnd="8dp"
             android:layout_gravity="center_vertical" />
 
-        <!-- desni deo: user + tekst -->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"

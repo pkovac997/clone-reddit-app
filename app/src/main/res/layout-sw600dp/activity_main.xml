@@ -7,12 +7,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!-- Glavni deo ekrana: toolbar + fragment container -->
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <!-- Toolbar ostaje full-width na vrhu -->
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/topAppBar"
             android:layout_width="match_parent"
@@ -23,7 +21,6 @@
             app:titleCentered="true"
             app:menu="@menu/menu_drawer" />
 
-        <!-- Centralna "kolona" za sadržaj na tabletu -->
         <FrameLayout
             android:id="@+id/fragmentContainer"
             android:layout_width="900dp"
@@ -35,7 +32,6 @@
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
-    <!-- Navigation drawer sa menijem (fiksna širina je lepša na tabletu) -->
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/navigationView"
         android:layout_width="280dp"

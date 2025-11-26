@@ -7,7 +7,6 @@
     android:orientation="vertical"
     android:padding="10dp">
 
-    <!-- Create Post Card -->
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cardCreatePost"
         android:layout_width="match_parent"
@@ -24,17 +23,15 @@
             android:orientation="vertical"
             android:padding="12dp">
 
-            <!-- "Header" kartice: mala info šta radiš -->
             <TextView
                 android:id="@+id/tvCreatePostTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Create a post"
+                android:text="@string/create_a_post"
                 android:textStyle="bold"
                 android:textSize="16sp"
                 android:layout_marginBottom="8dp" />
 
-            <!-- Naslov posta -->
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -45,7 +42,7 @@
                     android:id="@+id/etPostTitle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Post title"
+                    android:hint="@string/post_title"
                     android:maxLines="1" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -59,7 +56,7 @@
                     android:id="@+id/etPostContent"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Write your post..."
+                    android:hint="@string/write_your_post"
                     android:minLines="2"
                     android:maxLines="6"
                     android:gravity="top|start" />
@@ -74,7 +71,7 @@
                 android:adjustViewBounds="true"
                 android:visibility="gone" />
 
-            <!-- Donji red: community + attach + submit -->
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -82,7 +79,6 @@
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
-                <!-- Community izbor -->
                 <Spinner
                     android:id="@+id/spinnerCommunity"
                     android:layout_width="0dp"
@@ -91,7 +87,6 @@
                     android:paddingEnd="4dp"
                     android:prompt="@string/select_community" />
 
-                <!-- Ikonice za attach -->
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -102,7 +97,7 @@
                         android:layout_width="40dp"
                         android:layout_height="40dp"
                         android:src="@drawable/image_24px"
-                        android:contentDescription="Attach image"
+                        android:contentDescription="@string/attach_image"
                         android:background="?attr/selectableItemBackgroundBorderless"
                         android:padding="6dp" />
 
@@ -111,7 +106,7 @@
                         android:layout_width="40dp"
                         android:layout_height="40dp"
                         android:src="@drawable/camera_24px"
-                        android:contentDescription="Attach video"
+                        android:contentDescription="@string/attach_video"
                         android:background="?attr/selectableItemBackgroundBorderless"
                         android:padding="6dp" />
                 </LinearLayout>
@@ -123,7 +118,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
-                    android:text="Submit" />
+                    android:text="@string/submit" />
             </LinearLayout>
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>

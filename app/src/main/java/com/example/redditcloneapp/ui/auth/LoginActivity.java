@@ -63,6 +63,6 @@ public class LoginActivity extends AppCompatActivity {
     private void openMain() {
         Intent i = new Intent(this, MainActivity.class);
         startActivity(i);
-        finish(); // da se ne vraca na login pritiskom na back
+        finish();
     }
 }

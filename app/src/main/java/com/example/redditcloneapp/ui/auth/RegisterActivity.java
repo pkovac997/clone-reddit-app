@@ -85,7 +85,6 @@ public class RegisterActivity extends AppCompatActivity {
                             return;
                         }
 
-                        // 2. Kreiramo User dokument u Firestore/Realtime DB preko UserRepository
                         createUserInDatabase(firebaseUser, username);
                     } else {
                         binding.btnRegister.setEnabled(true);

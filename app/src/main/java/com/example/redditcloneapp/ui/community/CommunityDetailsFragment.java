@@ -56,7 +56,7 @@ public class CommunityDetailsFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         loadCommunity();
-        // kasnije ovde možemo dodati loadCommunityPosts();
+        //loadCommunityPosts();
     }
 
     private void loadCommunity() {

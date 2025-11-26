@@ -63,7 +63,7 @@ public class CommunitiesFragment extends Fragment {
     }
 
     private void setupRecyclerViews() {
-        // Horizontalni za "to follow"
+
         toFollowAdapter = new CommunityToFollowAdapter(new OnCommunityFollowClickListener() {
             @Override
             public void onCommunityClick(Community community) {
@@ -98,7 +98,6 @@ public class CommunitiesFragment extends Fragment {
         binding.rvCommunitiesToFollow.setLayoutManager(horizontalLayout);
         binding.rvCommunitiesToFollow.setAdapter(toFollowAdapter);
 
-        // Vertikalni za "you follow"
         followingAdapter = new CommunityFollowingAdapter(new OnCommunityFollowClickListener() {
             @Override
             public void onCommunityClick(Community community) {
@@ -159,7 +158,7 @@ public class CommunitiesFragment extends Fragment {
                 new androidx.appcompat.app.AlertDialog.Builder(requireContext())
                         .setTitle("Create community")
                         .setView(communityBinding.getRoot())
-                        .setPositiveButton("Create", null)   // override posle
+                        .setPositiveButton("Create", null)
                         .setNegativeButton("Cancel", (d, which) -> d.dismiss())
                         .create();
 
