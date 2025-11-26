@@ -36,13 +36,13 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
             var firstImage = post.getImageUrls().getFirst();
             try {
                 Uri uri = Uri.parse(firstImage);
-                binding.ivPostImage.setVisibility(View.VISIBLE);
+                binding.cardPostImage.setVisibility(View.VISIBLE);
                 binding.ivPostImage.setImageURI(uri);
             } catch (Exception e) {
-                binding.ivPostImage.setVisibility(View.GONE);
+                binding.cardPostImage.setVisibility(View.GONE);
             }
         } else {
-            binding.ivPostImage.setVisibility(View.GONE);
+            binding.cardPostImage.setVisibility(View.GONE);
         }
 
         binding.getRoot().setOnClickListener(v -> {

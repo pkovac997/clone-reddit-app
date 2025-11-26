@@ -9,4 +9,8 @@
     <string name="unfollow">Unfollow</string>
     <string name="short_description_of_the_community">Short description of the community</string>
     <string name="follow">Follow</string>
+    <string name="post_upvote">Upvote post</string>
+    <string name="post_downvote">Downvote post</string>
+    <string name="post_comments">Comments</string>
+    <string name="post_share">Share</string>
 </resources>
