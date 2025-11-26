@@ -146,7 +146,7 @@ public class FirebaseDataSource {
                                 var posts = queryDocumentSnapshots
                                         .getDocuments()
                                         .stream()
-                                        .map(documentSnapshot1 -> documentSnapshot1.toObject(Post.class))
+                                        .map(snapshot -> snapshot.toObject(Post.class))
                                         .collect(Collectors.toList());
                                 callback.onSuccess(posts);
                             })
@@ -309,6 +309,94 @@ public class FirebaseDataSource {
                     database.collection(Post.COLLECTION_NAME)
                             .document(post.getId())
                             .set(post, SetOptions.merge());
+                })
+                .addOnFailureListener(callback::onError);
+    }
+
+    public void userFollowingCommunities(String userId, DbCallback<List<Community>> callback) {
+        database.collection(User.COLLECTION_NAME)
+                        .document(userId)
+                        .get()
+                .addOnSuccessListener(documentSnapshot ->  {
+                    var user = documentSnapshot.toObject(User.class);
+
+                    database.collection(Community.COLLECTION_NAME)
+                            .whereIn(Community.Fields.id, user.getCommunityFollows())
+                            .get()
+                            .addOnSuccessListener(queryDocumentSnapshots -> {
+                                var communities = new ArrayList<Community>();
+                                for (var document : queryDocumentSnapshots.getDocuments()) {
+                                    var community = document.toObject(Community.class);
+                                    communities.add(community);
+                                }
+                                callback.onSuccess(communities);
+                            })
+                            .addOnFailureListener(callback::onError);
+                });
+    }
+
+    public void userNotFollowingCommunities(String userId, DbCallback<List<Community>> callback) {
+        database.collection(User.COLLECTION_NAME)
+                .document(userId)
+                .get()
+                .addOnSuccessListener(documentSnapshot ->  {
+                    var user = documentSnapshot.toObject(User.class);
+
+                    database.collection(Community.COLLECTION_NAME)
+                            .get()
+                            .addOnSuccessListener(docSnapshot -> {
+                                var communities = new ArrayList<Community>();
+                                for (var document : docSnapshot.getDocuments()) {
+                                    var community = document.toObject(Community.class);
+
+                                    if (!user.getCommunityFollows().contains(community.getId())) {
+                                        communities.add(community);
+                                    }
+                                }
+                                callback.onSuccess(communities);
+                            })
+                            .addOnFailureListener(callback::onError);
+                });
+    }
+
+    public void followCommunity(String userId, String communityId, DbCallback<Community> callback) {
+        database.collection(Community.COLLECTION_NAME)
+                .document(communityId)
+                .get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    var community = documentSnapshot.toObject(Community.class);
+
+                    if (community.getFollowers() == null) {
+                        community.setFollowers(List.of(userId));
+                    }
+                    else if (!community.getFollowers().contains(userId)){
+                        community.getFollowers().add(userId);
+                    }
+
+                    database.collection(Community.COLLECTION_NAME)
+                            .document(communityId)
+                            .set(community, SetOptions.merge())
+                            .addOnSuccessListener(x -> callback.onSuccess(community));
+                })
+                .addOnFailureListener(callback::onError);
+    }
+
+    public void unfollowCommunity(String userId, String communityId, DbCallback<Community> callback) {
+        database.collection(Community.COLLECTION_NAME)
+                .document(communityId)
+                .get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    var community = documentSnapshot.toObject(Community.class);
+
+                    var following = community.getFollowers();
+
+                    if (following.contains(userId)) {
+                        following.remove(userId);
+                        database.collection(Community.COLLECTION_NAME)
+                                .document(communityId)
+                                .set(community, SetOptions.merge())
+                                .addOnSuccessListener(x -> callback.onSuccess(community));
+                    }
                 })
                 .addOnFailureListener(callback::onError);
     }

@@ -22,7 +22,7 @@ import com.example.redditcloneapp.infrastructure.firebase.common.DbCallback;
 import com.example.redditcloneapp.infrastructure.firebase.community.CommunityRepository;
 import com.example.redditcloneapp.infrastructure.firebase.post.PostRepository;
 import com.example.redditcloneapp.infrastructure.firebase.user.UserRepository;
-import com.example.redditcloneapp.ui.post.PostAdapter;
+import com.example.redditcloneapp.ui.post.adapters.PostAdapter;
 import com.example.redditcloneapp.ui.post.PostDetailsFragment;
 import com.example.redditcloneapp.ui.post.listeners.OnPostClickListener;
 import com.google.firebase.auth.FirebaseAuth;

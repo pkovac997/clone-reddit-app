@@ -49,4 +49,19 @@ public class CommunityRepository extends AbstractFirebaseDataSource {
         dataSource.ensureDefaultCommunityExists();
     }
 
+    public void userFollowingCommunities(String userId, DbCallback<List<Community>> callback){
+        dataSource.userFollowingCommunities(userId, callback);
+    }
+
+    public void userNotFollowingCommunities(String userId, DbCallback<List<Community>> callback) {
+        dataSource.userNotFollowingCommunities(userId, callback);
+    }
+
+    public void followCommunity(String userId, String communityId, DbCallback<Community> callback) {
+        dataSource.followCommunity(userId, communityId, callback);
+    }
+
+    public void unfollowCommunity(String userId, String communityId, DbCallback<Community> callback) {
+        dataSource.unfollowCommunity(userId, communityId, callback);
+    }
 }

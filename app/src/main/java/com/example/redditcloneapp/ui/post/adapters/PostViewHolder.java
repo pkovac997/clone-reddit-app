@@ -1,4 +1,4 @@
-package com.example.redditcloneapp.ui.post;
+package com.example.redditcloneapp.ui.post.adapters;
 
 import androidx.recyclerview.widget.RecyclerView;
 

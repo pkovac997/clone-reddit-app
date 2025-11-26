@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cardCommunityToFollow"
+    android:layout_width="220dp"
+    android:layout_height="wrap_content"
+    android:layout_marginEnd="8dp"
+    app:cardCornerRadius="12dp"
+    app:cardUseCompatPadding="true"
+    app:cardElevation="2dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="10dp">
+
+        <TextView
+            android:id="@+id/tvCommunityName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="c/community"
+            android:textStyle="bold"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tvCommunityDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="@string/short_description_of_the_community"
+            android:textSize="12sp"
+            android:maxLines="3"
+            android:ellipsize="end" />
+
+        <TextView
+            android:id="@+id/tvCommunityFollowers"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:text="123 followers"
+            android:textSize="11sp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnFollow"
+            style="?attr/materialButtonOutlinedStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/unfollow" />
+
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>

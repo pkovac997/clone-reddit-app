@@ -4,4 +4,9 @@
     <string name="nav_close">Close</string>
     <string name="select_community">Select community</string>
     <string name="reddit_clone_app_title">Reddit Clone App</string>
+    <string name="description_optional">Description (optional)</string>
+    <string name="community_name">Community name</string>
+    <string name="unfollow">Unfollow</string>
+    <string name="short_description_of_the_community">Short description of the community</string>
+    <string name="follow">Follow</string>
 </resources>
