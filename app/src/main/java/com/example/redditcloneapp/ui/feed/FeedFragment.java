@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -70,6 +71,8 @@ public class FeedFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        super.onCreate(savedInstanceState);
+
         cameraPermissionLauncher = registerForActivityResult(
                 new ActivityResultContracts.RequestPermission(),
                 isGranted -> {
@@ -84,12 +87,14 @@ public class FeedFragment extends Fragment {
         takePhotoLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
+                    if (binding == null) return;
+
                     if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
                         Bundle extras = result.getData().getExtras();
                         if (extras != null) {
-                            android.graphics.Bitmap bitmap = (android.graphics.Bitmap) extras.get("data");
+                            var bitmap = (Bitmap) extras.get("data");
                             if (bitmap != null) {
-                                Uri localUri = ImageHelper.saveBitmapToAppStorage(bitmap, getContext());
+                                Uri localUri = ImageHelper.saveBitmapToAppStorage(bitmap, requireContext());
                                 if (localUri != null) {
                                     attachedImageUri = localUri;
                                     binding.ivImagePreview.setImageURI(localUri);
@@ -104,10 +109,12 @@ public class FeedFragment extends Fragment {
         pickImageLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
+                    if (binding == null) return;
+
                     if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
                         Uri pickedUri = result.getData().getData();
                         if (pickedUri != null) {
-                            Uri localUri = ImageHelper.copyImageToAppStorage(pickedUri, getContext());
+                            Uri localUri = ImageHelper.copyImageToAppStorage(pickedUri, requireContext());
                             if (localUri != null) {
                                 attachedImageUri = localUri;
                                 binding.ivImagePreview.setImageURI(localUri);
@@ -375,6 +382,7 @@ public class FeedFragment extends Fragment {
     private void openImagePicker() {
         Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         intent.setType("image/*");
         pickImageLauncher.launch(intent);
     }

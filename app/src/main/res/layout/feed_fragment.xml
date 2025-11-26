@@ -107,7 +107,7 @@
                         android:padding="6dp" />
 
                     <ImageButton
-                        android:id="@+id/btnAttachVideo"
+                        android:id="@+id/btnAttachCamera"
                         android:layout_width="40dp"
                         android:layout_height="40dp"
                         android:src="@drawable/camera_24px"
