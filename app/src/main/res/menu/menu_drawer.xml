@@ -3,22 +3,17 @@
 
     <item
         android:id="@+id/nav_feed"
-        android:title="Feed" />
+        android:title="Feed"
+        android:icon="@drawable/ic_home"/>
 
     <item
         android:id="@+id/nav_communities"
-        android:title="Communities" />
+        android:title="Communities"
+        android:icon="@drawable/ic_groups"/>
 
     <item
-        android:id="@+id/nav_followers"
-        android:title="Followers" />
-
-    <item
-        android:id="@+id/nav_profile"
-        android:title="Profile" />
-
-    <item
-        android:id="@+id/nav_settings"
-        android:title="Settings" />
+        android:id="@+id/nav_logout"
+        android:title="Log out"
+        android:icon="@drawable/logout_24px" />
 
 </menu>

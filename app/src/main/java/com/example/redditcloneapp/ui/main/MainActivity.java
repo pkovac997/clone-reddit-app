@@ -1,6 +1,8 @@
 package com.example.redditcloneapp.ui.main;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -9,9 +11,10 @@ import androidx.core.view.GravityCompat;
 
 import com.example.redditcloneapp.R;
 import com.example.redditcloneapp.databinding.ActivityMainBinding;
+import com.example.redditcloneapp.ui.auth.LoginActivity;
 import com.example.redditcloneapp.ui.community.CommunitiesFragment;
 import com.example.redditcloneapp.ui.feed.FeedFragment;
-import com.example.redditcloneapp.ui.profile.ProfileFragment;
+import com.google.firebase.auth.FirebaseAuth;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -35,14 +38,13 @@ public class MainActivity extends AppCompatActivity {
                 if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
                     binding.drawerLayout.closeDrawer(GravityCompat.START);
                 } else {
-                    setEnabled(false); // allow normal back behavior
+                    setEnabled(false);
                     getOnBackPressedDispatcher().onBackPressed();
                 }
             }
         });
 
         if (savedInstanceState == null) {
-            // default: Feed
             openFeed();
             binding.navigationView.setCheckedItem(R.id.nav_feed);
         }
@@ -61,13 +63,7 @@ public class MainActivity extends AppCompatActivity {
         binding.drawerLayout.addDrawerListener(drawerToggle);
         drawerToggle.syncState();
 
-        binding.topAppBar.setOnMenuItemClickListener(item -> {
-            if (item.getItemId() == R.id.action_search) {
-                // TODO: open search UI
-                return true;
-            }
-            return false;
-        });
+        binding.topAppBar.setOnMenuItemClickListener(item -> item.getItemId() == R.id.action_search);
     }
 
     private void setupNavigationView() {
@@ -77,12 +73,8 @@ public class MainActivity extends AppCompatActivity {
                 openFeed();
             } else if (id == R.id.nav_communities) {
                 openCommunities();
-            } else if (id == R.id.nav_followers) {
-                // TODO: open Followers fragment
-            } else if (id == R.id.nav_profile) {
-                openProfile();
-            } else if (id == R.id.nav_settings) {
-                // TODO: open Settings fragment
+            } else if (id == R.id.nav_logout) {
+                performLogout();
             }
 
             binding.drawerLayout.closeDrawers();
@@ -104,11 +96,15 @@ public class MainActivity extends AppCompatActivity {
                 .commit();
     }
 
-    private void openProfile() {
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.fragmentContainer, new ProfileFragment())
-                .commit();
+    private void performLogout() {
+        FirebaseAuth.getInstance().signOut();
+
+        Toast.makeText(this, "Logged out", Toast.LENGTH_SHORT).show();
+
+        Intent intent = new Intent(this, LoginActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
     }
+
 }
 

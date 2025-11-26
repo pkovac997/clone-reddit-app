@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cardCommunity"
+    android:layout_width="900dp"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_horizontal"
+    android:layout_marginVertical="10dp"
+    android:layout_marginHorizontal="16dp"
+    app:cardElevation="4dp"
+    app:cardCornerRadius="14dp"
+    app:cardUseCompatPadding="true"
+    app:strokeWidth="1dp"
+    app:strokeColor="?attr/colorOutline"
+    android:foreground="?attr/selectableItemBackground">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="18dp">
+
+        <TextView
+            android:id="@+id/tvCommunityName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="c/CommunityName"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:textColor="?attr/colorOnSurface" />
+
+        <TextView
+            android:id="@+id/tvCommunityDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Community description..."
+            android:textSize="15sp"
+            android:layout_marginTop="6dp"
+            android:textColor="?attr/colorOnSurfaceVariant" />
+
+        <TextView
+            android:id="@+id/tvCommunityFollowers"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="245 followers"
+            android:textSize="14sp"
+            android:layout_marginTop="10dp"
+            android:textColor="?attr/colorOnSurfaceVariant" />
+
+        <!-- Unfollow Button -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnUnfollow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:text="Unfollow"
+            android:textAllCaps="false"
+            android:textSize="14sp"
+            app:cornerRadius="14dp"
+            style="?attr/materialButtonOutlinedStyle"
+            app:strokeColor="?attr/colorPrimary" />
+
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>

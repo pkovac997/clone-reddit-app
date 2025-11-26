@@ -50,16 +50,15 @@ dependencies {
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
 
+    implementation("com.google.android.gms:play-services-maps:19.2.0")
+    implementation("com.google.android.gms:play-services-location:21.3.0")
+
     implementation(platform(libs.firebase.bom))
 
     implementation(libs.firebase.auth)
     implementation(libs.firebase.firestore)
     implementation(libs.firebase.storage)
     implementation(libs.firebase.messaging)
-
-    // Room local db
-    implementation(libs.room.runtime)
-    annotationProcessor(libs.room.compiler)
 
     // AndroidX + UI
     implementation(libs.material)
