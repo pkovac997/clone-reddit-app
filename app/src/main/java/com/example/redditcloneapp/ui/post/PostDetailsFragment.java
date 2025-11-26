@@ -112,13 +112,13 @@ public class PostDetailsFragment extends Fragment {
                     var first = post.getImageUrls().get(0);
                     try {
                         Uri uri = Uri.parse(first);
-                        binding.cardPost.setVisibility(View.VISIBLE);
                         binding.ivPostImage.setImageURI(uri);
                     } catch (Exception e) {
                         binding.ivPostImage.setVisibility(View.GONE);
+                        binding.cardPost.setVisibility(View.GONE);
                     }
                 } else {
-                    binding.cardPost.setVisibility(View.GONE);
+                    binding.ivPostImage.setVisibility(View.GONE);
                 }
 
                 updateScoreAndVoteState();

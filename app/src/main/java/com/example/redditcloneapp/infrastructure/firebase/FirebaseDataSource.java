@@ -124,7 +124,6 @@ public class FirebaseDataSource {
                 .get()
                 .addOnSuccessListener(querySnapshot -> {
                     var post = querySnapshot.toObject(Post.class);
-                    post.setId(querySnapshot.getId());
                     callback.onSuccess(post);
                 })
                 .addOnFailureListener(callback::onError);

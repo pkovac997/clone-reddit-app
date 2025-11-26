@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.TextUtils;
@@ -43,7 +42,6 @@ import com.google.firebase.auth.FirebaseUser;
 import java.sql.Date;
 import java.time.Instant;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class FeedFragment extends Fragment {
@@ -69,8 +67,6 @@ public class FeedFragment extends Fragment {
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
         super.onCreate(savedInstanceState);
 
         cameraPermissionLauncher = registerForActivityResult(
@@ -146,8 +142,8 @@ public class FeedFragment extends Fragment {
         setupRecycler();
         setupCommunitySpinner();
         setupSubmitPost();
-
         loadUserCommunities();
+        loadFeed();
 
         binding.btnAttachImage.setOnClickListener(v -> openImagePicker());
         binding.btnAttachCamera.setOnClickListener(v -> {
@@ -157,8 +153,6 @@ public class FeedFragment extends Fragment {
                 cameraPermissionLauncher.launch(Manifest.permission.CAMERA);
             }
         });
-
-        loadFeed();
     }
 
     private void setupRecycler() {

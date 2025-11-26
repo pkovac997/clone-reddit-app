@@ -9,6 +9,17 @@ import androidx.annotation.NonNull;
 
 public class ImageHelper {
 
+    public static boolean isImageFileExists(@NonNull Uri uri, Context context) {
+        try {
+            java.io.File file = new java.io.File(uri.getPath());
+            return file.exists() && file.isFile();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+
     public static Uri saveBitmapToAppStorage(@NonNull Bitmap bitmap, Context context) {
         try {
             java.io.File imagesDir = new java.io.File(context.getFilesDir(), "images");
