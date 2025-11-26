@@ -32,4 +32,12 @@ public class PostRepository extends AbstractFirebaseDataSource {
     public void createPost(Post post, DbCallback<Post> callback) {
         dataSource.createPost(post, callback);
     }
+
+    public void upvotePost(String userId, String postId, DbCallback<Post> callback) {
+        dataSource.upvotePost(userId, postId, callback);
+    }
+
+    public void downvotePost(String userId, String postId, DbCallback<Post> callback) {
+        dataSource.downvotePost(userId, postId, callback);
+    }
 }

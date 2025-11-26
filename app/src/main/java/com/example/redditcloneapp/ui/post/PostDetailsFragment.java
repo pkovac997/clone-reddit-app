@@ -32,6 +32,9 @@ public class PostDetailsFragment extends Fragment {
     private FragmentPostDetailsBinding binding;
 
     private String postId;
+
+    private Post currentPost;
+
     private PostRepository postRepository;
     private CommentRepository commentRepository;
     private CommentAdapter commentAdapter;
@@ -74,6 +77,8 @@ public class PostDetailsFragment extends Fragment {
         loadPost();
         loadComments();
 
+        binding.btnUpvote.setOnClickListener(v -> handleUpvote());
+        binding.btnDownvote.setOnClickListener(v -> handleDownvote());
         binding.btnSubmitComment.setOnClickListener(v -> submitComment());
     }
 
@@ -89,7 +94,7 @@ public class PostDetailsFragment extends Fragment {
             @Override
             public void onSuccess(Post post) {
                 if (post == null) return;
-
+                currentPost = post;
                 binding.tvCommunity.setText("c/" + post.getCommunityName());
                 binding.tvUser.setText("u/" + post.getUserUsername());
                 binding.tvPostTitle.setText(post.getTitle());
@@ -101,6 +106,9 @@ public class PostDetailsFragment extends Fragment {
 
                 int commentsCount = post.getComments() != null ? post.getComments().size() : 0;
                 binding.tvCommentsHeader.setText("Comments (" + commentsCount + ")");
+
+                updateScoreAndVoteState();
+                updateCommentsHeader(commentsCount);
             }
 
             @Override
@@ -128,6 +136,71 @@ public class PostDetailsFragment extends Fragment {
 
     private void updateCommentsHeader(int count) {
         binding.tvCommentsHeader.setText("Comments (" + count + ")");
+    }
+
+    private void updateScoreAndVoteState() {
+        if (currentPost == null) return;
+
+        int upCount = currentPost.getUserUpvotes() != null ? currentPost.getUserUpvotes().size() : 0;
+        int downCount = currentPost.getUserDownvotes() != null ? currentPost.getUserDownvotes().size() : 0;
+        int score = upCount - downCount;
+        binding.tvScore.setText(String.valueOf(score));
+
+        FirebaseUser current = FirebaseAuth.getInstance().getCurrentUser();
+        if (current != null) {
+            String uid = current.getUid();
+            boolean upvoted = currentPost.getUserUpvotes() != null
+                    && currentPost.getUserUpvotes().contains(uid);
+            boolean downvoted = currentPost.getUserDownvotes() != null
+                    && currentPost.getUserDownvotes().contains(uid);
+
+            binding.btnUpvote.setAlpha(upvoted ? 1.0f : 0.5f);
+            binding.btnDownvote.setAlpha(downvoted ? 1.0f : 0.5f);
+        }
+    }
+
+    private void handleUpvote() {
+        FirebaseUser current = FirebaseAuth.getInstance().getCurrentUser();
+        if (current == null) {
+            Toast.makeText(getContext(), "You must be logged in", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (postId == null) return;
+
+        postRepository.upvotePost(current.getUid(), postId, new DbCallback<>() {
+            @Override
+            public void onSuccess(Post updated) {
+                currentPost = updated;
+                updateScoreAndVoteState();
+            }
+
+            @Override
+            public void onError(Exception exception) {
+                Toast.makeText(getContext(), "Failed to vote", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void handleDownvote() {
+        FirebaseUser current = FirebaseAuth.getInstance().getCurrentUser();
+        if (current == null) {
+            Toast.makeText(getContext(), "You must be logged in", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (postId == null) return;
+
+        postRepository.downvotePost(current.getUid(), postId, new DbCallback<>() {
+            @Override
+            public void onSuccess(Post updated) {
+                currentPost = updated;
+                updateScoreAndVoteState();
+            }
+
+            @Override
+            public void onError(Exception exception) {
+                Toast.makeText(getContext(), "Failed to vote", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void submitComment() {

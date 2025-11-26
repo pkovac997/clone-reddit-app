@@ -16,6 +16,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
     }
 
     void bind(Post post, OnPostClickListener listener) {
+
         binding.tvCommunity.setText("c/" + post.getCommunityName());
         binding.tvUser.setText("u/" + post.getUserUsername());
         binding.tvPostTitle.setText(post.getTitle());
@@ -36,5 +37,12 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
             if (listener != null) listener.onCommentsClick(post);
         });
 
+        binding.btnUpvote.setOnClickListener(v -> {
+            if (listener != null) listener.onUpvoteClick(post);
+        });
+
+        binding.btnDownvote.setOnClickListener(v -> {
+            if (listener != null) listener.onDownvoteClick(post);
+        });
     }
 }

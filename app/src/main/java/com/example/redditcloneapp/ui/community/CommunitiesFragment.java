@@ -67,7 +67,7 @@ public class CommunitiesFragment extends Fragment {
         toFollowAdapter = new CommunityToFollowAdapter(new OnCommunityFollowClickListener() {
             @Override
             public void onCommunityClick(Community community) {
-                // TODO: otvori community details (kasnije)
+                openCommunityDetails(community);
             }
 
             @Override
@@ -102,7 +102,7 @@ public class CommunitiesFragment extends Fragment {
         followingAdapter = new CommunityFollowingAdapter(new OnCommunityFollowClickListener() {
             @Override
             public void onCommunityClick(Community community) {
-                // TODO: otvori community details
+                openCommunityDetails(community);
             }
 
             @Override
@@ -130,6 +130,20 @@ public class CommunitiesFragment extends Fragment {
 
         binding.rvCommunitiesYouFollow.setLayoutManager(new LinearLayoutManager(getContext()));
         binding.rvCommunitiesYouFollow.setAdapter(followingAdapter);
+    }
+
+    private void openCommunityDetails(Community community) {
+        if (community.getId() == null) {
+            Toast.makeText(getContext(), "Invalid community", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        var fragment = CommunityDetailsFragment.newInstance(community.getId());
+        requireActivity().getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragmentContainer, fragment)
+                .addToBackStack(null)
+                .commit();
     }
 
     private void setupFab() {

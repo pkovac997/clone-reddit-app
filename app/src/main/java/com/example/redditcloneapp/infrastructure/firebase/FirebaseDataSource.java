@@ -180,7 +180,6 @@ public class FirebaseDataSource {
                 .get()
                 .addOnSuccessListener(documentSnapshot -> {
                     var community = documentSnapshot.toObject(Community.class);
-                    community.setId(documentSnapshot.getId());
                     callback.onSuccess(community);
                 })
                 .addOnFailureListener(callback::onError);
@@ -432,5 +431,59 @@ public class FirebaseDataSource {
                                 });
                     }
                 }).addOnFailureListener(callback::onError);
+    }
+
+    public void upvotePost(String userId, String postId, DbCallback<Post> callback) {
+        database.collection(Post.COLLECTION_NAME)
+                .document(postId)
+                .get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    var post = documentSnapshot.toObject(Post.class);
+
+                    if (post.getUserDownvotes() != null && post.getUserDownvotes().contains(userId)) {
+                        post.getUserDownvotes().remove(userId);
+                    }
+
+                    if (post.getUserUpvotes() == null || post.getUserUpvotes().size() == 0) {
+                        post.setUserUpvotes(List.of(userId));
+                    } else if (!post.getUserUpvotes().contains(userId)) {
+                        post.getUserUpvotes().add(userId);
+                    }
+
+                    database.collection(Post.COLLECTION_NAME)
+                            .document(postId)
+                            .set(post, SetOptions.merge())
+                            .addOnSuccessListener(x -> {
+                                callback.onSuccess(post);
+                            });
+                })
+                .addOnFailureListener(callback::onError);
+    }
+
+    public void downvotePost(String userId, String postId, DbCallback<Post> callback) {
+        database.collection(Post.COLLECTION_NAME)
+                .document(postId)
+                .get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    var post = documentSnapshot.toObject(Post.class);
+
+                    if (post.getUserUpvotes() != null && post.getUserUpvotes().contains(userId)) {
+                        post.getUserUpvotes().remove(userId);
+                    }
+
+                    if (post.getUserDownvotes() == null || post.getUserDownvotes().size() == 0) {
+                        post.setUserDownvotes(List.of(userId));
+                    } else if (!post.getUserDownvotes().contains(userId)) {
+                        post.getUserDownvotes().add(userId);
+                    }
+
+                    database.collection(Post.COLLECTION_NAME)
+                            .document(postId)
+                            .set(post, SetOptions.merge())
+                            .addOnSuccessListener(x -> {
+                                callback.onSuccess(post);
+                            });
+                })
+                .addOnFailureListener(callback::onError);
     }
 }

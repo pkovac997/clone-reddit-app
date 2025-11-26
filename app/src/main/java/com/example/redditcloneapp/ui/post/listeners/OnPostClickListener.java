@@ -5,4 +5,6 @@ import com.example.redditcloneapp.domain.models.Post;
 public interface OnPostClickListener {
     void onPostClick(Post post);
     void onCommentsClick(Post post);
+    void onUpvoteClick(Post post);
+    void onDownvoteClick(Post post);
 }

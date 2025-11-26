@@ -45,6 +45,10 @@ public class CommunityRepository extends AbstractFirebaseDataSource {
         dataSource.getDefaultCommunity(callback);
     }
 
+    public void getCommunityById(String communityId, DbCallback<Community> callback){
+        dataSource.getCommunityById(communityId, callback);
+    }
+
     public void ensureDefaultCommunityExists() {
         dataSource.ensureDefaultCommunityExists();
     }

@@ -83,6 +83,49 @@ public class FeedFragment extends Fragment {
             public void onCommentsClick(Post post) {
                 openPostDetails(post);
             }
+
+            @Override
+            public void onUpvoteClick(Post post) {
+                var current = FirebaseAuth.getInstance().getCurrentUser();
+                if (current == null) {
+                    Toast.makeText(getContext(), "You must be logged in", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                postRepository.upvotePost(current.getUid(), post.getId(), new DbCallback<>() {
+
+                    @Override
+                    public void onSuccess(Post post) {
+                        adapter.updatePost(post);
+                    }
+
+                    @Override
+                    public void onError(Exception exception) {
+                        Toast.makeText(getContext(), "Failed to vote", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+
+            @Override
+            public void onDownvoteClick(Post post) {
+                var current = FirebaseAuth.getInstance().getCurrentUser();
+                if (current == null) {
+                    Toast.makeText(getContext(), "You must be logged in", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                postRepository.downvotePost(current.getUid(), post.getId(), new DbCallback<>() {
+                    @Override
+                    public void onSuccess(Post post) {
+                        adapter.updatePost(post);
+                    }
+
+                    @Override
+                    public void onError(Exception exception) {
+                        Toast.makeText(getContext(), "Failed to vote", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
         });
 
         binding.rvFeed.setLayoutManager(new LinearLayoutManager(getContext()));
