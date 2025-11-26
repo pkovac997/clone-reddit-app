@@ -35,6 +35,7 @@ import com.example.redditcloneapp.infrastructure.firebase.user.UserRepository;
 import com.example.redditcloneapp.ui.post.adapters.PostAdapter;
 import com.example.redditcloneapp.ui.post.PostDetailsFragment;
 import com.example.redditcloneapp.ui.post.listeners.OnPostClickListener;
+import com.example.redditcloneapp.util.ImageHelper;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -48,15 +49,16 @@ public class FeedFragment extends Fragment {
 
     private FeedFragmentBinding binding;
 
-    private static final int SDK_33 = Build.VERSION_CODES.TIRAMISU;
-
     private PostAdapter adapter;
     private PostRepository postRepository;
     private CommunityRepository communityRepository;
     private UserRepository userRepository;
 
+    private ActivityResultLauncher<String> cameraPermissionLauncher;
+    private ActivityResultLauncher<Intent> takePhotoLauncher;
+
     private Uri attachedImageUri;
-    private ActivityResultLauncher<String> permissionLauncher;
+
     private ActivityResultLauncher<Intent> pickImageLauncher;
 
     private FirebaseAuth auth;
@@ -64,18 +66,37 @@ public class FeedFragment extends Fragment {
     private final List<Community> userCommunities = new ArrayList<>();
     private ArrayAdapter<String> communitySpinnerAdapter;
 
-    @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        binding = FeedFragmentBinding.inflate(inflater, container, false);
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
-        permissionLauncher = registerForActivityResult(
+        cameraPermissionLauncher = registerForActivityResult(
                 new ActivityResultContracts.RequestPermission(),
                 isGranted -> {
                     if (isGranted) {
-                        openImagePicker();
+                        openCamera();
                     } else {
-                        Toast.makeText(getContext(), "Permission denied", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "Camera permission denied", Toast.LENGTH_SHORT).show();
+                    }
+                }
+        );
+
+        takePhotoLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
+                        Bundle extras = result.getData().getExtras();
+                        if (extras != null) {
+                            android.graphics.Bitmap bitmap = (android.graphics.Bitmap) extras.get("data");
+                            if (bitmap != null) {
+                                Uri localUri = ImageHelper.saveBitmapToAppStorage(bitmap, getContext());
+                                if (localUri != null) {
+                                    attachedImageUri = localUri;
+                                    binding.ivImagePreview.setImageURI(localUri);
+                                    binding.ivImagePreview.setVisibility(View.VISIBLE);
+                                }
+                            }
+                        }
                     }
                 }
         );
@@ -84,49 +105,52 @@ public class FeedFragment extends Fragment {
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
                     if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
-                        Uri uri = result.getData().getData();
-                        if (uri != null) {
-                            attachedImageUri = uri;
-                            binding.ivImagePreview.setImageURI(uri);
-                            binding.ivImagePreview.setVisibility(View.VISIBLE);
+                        Uri pickedUri = result.getData().getData();
+                        if (pickedUri != null) {
+                            Uri localUri = ImageHelper.copyImageToAppStorage(pickedUri, getContext());
+                            if (localUri != null) {
+                                attachedImageUri = localUri;
+                                binding.ivImagePreview.setImageURI(localUri);
+                                binding.ivImagePreview.setVisibility(View.VISIBLE);
+                            }
                         }
                     }
                 }
         );
+    }
 
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        binding = FeedFragmentBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view,
+                              @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         auth = FirebaseAuth.getInstance();
-
         postRepository = new PostRepository();
         communityRepository = new CommunityRepository();
         userRepository = new UserRepository();
-
-        // UMESTO da odmah zoveš loadFeed()
-        if (hasImagePermission()) {
-            loadFeed();
-        } else {
-            requestImagePermission();
-        }
-
-        binding.btnAttachImage.setOnClickListener(v -> {
-            if (hasImagePermission()) {
-                openImagePicker();
-            } else {
-                requestImagePermission();
-            }
-        });
 
         setupRecycler();
         setupCommunitySpinner();
         setupSubmitPost();
 
         loadUserCommunities();
+
+        binding.btnAttachImage.setOnClickListener(v -> openImagePicker());
+        binding.btnAttachCamera.setOnClickListener(v -> {
+            if (hasCameraPermission()) {
+                openCamera();
+            } else {
+                cameraPermissionLauncher.launch(Manifest.permission.CAMERA);
+            }
+        });
+
         loadFeed();
     }
 
@@ -151,7 +175,6 @@ public class FeedFragment extends Fragment {
                 }
 
                 postRepository.upvotePost(current.getUid(), post.getId(), new DbCallback<>() {
-
                     @Override
                     public void onSuccess(Post post) {
                         adapter.updatePost(post);
@@ -215,7 +238,6 @@ public class FeedFragment extends Fragment {
 
     private void setupSubmitPost() {
         binding.btnSubmitPost.setOnClickListener(v -> {
-
             FirebaseUser current = auth.getCurrentUser();
 
             if (current == null) {
@@ -275,13 +297,12 @@ public class FeedFragment extends Fragment {
             @Override
             public void onSuccess(Post entity) {
                 Toast.makeText(getContext(), "Post created", Toast.LENGTH_SHORT).show();
-                // Clear inputs
                 binding.etPostTitle.setText("");
                 binding.etPostContent.setText("");
                 attachedImageUri = null;
                 binding.ivImagePreview.setImageDrawable(null);
                 binding.ivImagePreview.setVisibility(View.GONE);
-                // Reload feed or optimistically add to adapter
+
                 loadFeed();
             }
 
@@ -294,7 +315,6 @@ public class FeedFragment extends Fragment {
 
     private void loadUserCommunities() {
         FirebaseUser current = auth.getCurrentUser();
-
         if (current == null) {
             return;
         }
@@ -302,8 +322,6 @@ public class FeedFragment extends Fragment {
         userRepository.getUserById(current.getUid(), new DbCallback<>() {
             @Override
             public void onSuccess(User user) {
-                // Assuming your FirebaseDataSource has a method like:
-                // getCommunitiesByIds(List<String> ids, DbCallback<List<Community>>)
                 communityRepository.getUserCommunities(user.getCommunityFollows(), new DbCallback<>() {
                     @Override
                     public void onSuccess(List<Community> communities) {
@@ -338,7 +356,7 @@ public class FeedFragment extends Fragment {
     private void loadFeed() {
         FirebaseUser current = auth.getCurrentUser();
         if (current == null) {
-            return; // or load some default public feed
+            return;
         }
 
         postRepository.getPostByCommunityFromUserId(current.getUid(), new DbCallback<>() {
@@ -354,33 +372,26 @@ public class FeedFragment extends Fragment {
         });
     }
 
-    private boolean hasImagePermission() {
-        String permission;
-        if (Build.VERSION.SDK_INT >= SDK_33) {
-            permission = Manifest.permission.READ_MEDIA_IMAGES;
-        } else {
-            permission = Manifest.permission.READ_EXTERNAL_STORAGE;
-        }
-
-        return ContextCompat.checkSelfPermission(requireContext(), permission)
-                == PackageManager.PERMISSION_GRANTED;
-    }
-
-    private void requestImagePermission() {
-        String permission;
-        if (Build.VERSION.SDK_INT >= SDK_33) {
-            permission = Manifest.permission.READ_MEDIA_IMAGES;
-        } else {
-            permission = Manifest.permission.READ_EXTERNAL_STORAGE;
-        }
-
-        permissionLauncher.launch(permission);
-    }
-
     private void openImagePicker() {
-        Uri imagesUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
-        Intent intent = new Intent(Intent.ACTION_PICK, imagesUri);
+        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
         intent.setType("image/*");
         pickImageLauncher.launch(intent);
+    }
+
+    private void openCamera() {
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (intent.resolveActivity(requireContext().getPackageManager()) != null) {
+            takePhotoLauncher.launch(intent);
+        } else {
+            Toast.makeText(getContext(), "No camera app found", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private boolean hasCameraPermission() {
+        return ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.CAMERA
+        ) == PackageManager.PERMISSION_GRANTED;
     }
 }

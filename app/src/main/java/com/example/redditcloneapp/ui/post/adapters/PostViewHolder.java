@@ -41,6 +41,8 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
             } catch (Exception e) {
                 binding.ivPostImage.setVisibility(View.GONE);
             }
+        } else {
+            binding.ivPostImage.setVisibility(View.GONE);
         }
 
         binding.getRoot().setOnClickListener(v -> {
