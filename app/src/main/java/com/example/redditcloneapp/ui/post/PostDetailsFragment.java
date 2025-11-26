@@ -1,5 +1,6 @@
 package com.example.redditcloneapp.ui.post;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -106,6 +107,19 @@ public class PostDetailsFragment extends Fragment {
 
                 int commentsCount = post.getComments() != null ? post.getComments().size() : 0;
                 binding.tvCommentsHeader.setText("Comments (" + commentsCount + ")");
+
+                if (post.getImageUrls() != null && !post.getImageUrls().isEmpty()) {
+                    var first = post.getImageUrls().get(0);
+                    try {
+                        Uri uri = Uri.parse(first);
+                        binding.ivPostImage.setVisibility(View.VISIBLE);
+                        binding.ivPostImage.setImageURI(uri);
+                    } catch (Exception e) {
+                        binding.ivPostImage.setVisibility(View.GONE);
+                    }
+                } else {
+                    binding.ivPostImage.setVisibility(View.GONE);
+                }
 
                 updateScoreAndVoteState();
                 updateCommentsHeader(commentsCount);

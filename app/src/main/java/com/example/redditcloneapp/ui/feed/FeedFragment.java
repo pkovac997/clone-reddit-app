@@ -1,6 +1,13 @@
 package com.example.redditcloneapp.ui.feed;
 
+import android.Manifest;
+import android.app.Activity;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,8 +15,11 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -31,16 +41,23 @@ import com.google.firebase.auth.FirebaseUser;
 import java.sql.Date;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class FeedFragment extends Fragment {
 
     private FeedFragmentBinding binding;
 
+    private static final int SDK_33 = Build.VERSION_CODES.TIRAMISU;
+
     private PostAdapter adapter;
     private PostRepository postRepository;
     private CommunityRepository communityRepository;
     private UserRepository userRepository;
+
+    private Uri attachedImageUri;
+    private ActivityResultLauncher<String> permissionLauncher;
+    private ActivityResultLauncher<Intent> pickImageLauncher;
 
     private FirebaseAuth auth;
 
@@ -51,6 +68,32 @@ public class FeedFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FeedFragmentBinding.inflate(inflater, container, false);
+
+        permissionLauncher = registerForActivityResult(
+                new ActivityResultContracts.RequestPermission(),
+                isGranted -> {
+                    if (isGranted) {
+                        openImagePicker();
+                    } else {
+                        Toast.makeText(getContext(), "Permission denied", Toast.LENGTH_SHORT).show();
+                    }
+                }
+        );
+
+        pickImageLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
+                        Uri uri = result.getData().getData();
+                        if (uri != null) {
+                            attachedImageUri = uri;
+                            binding.ivImagePreview.setImageURI(uri);
+                            binding.ivImagePreview.setVisibility(View.VISIBLE);
+                        }
+                    }
+                }
+        );
+
         return binding.getRoot();
     }
 
@@ -63,6 +106,21 @@ public class FeedFragment extends Fragment {
         postRepository = new PostRepository();
         communityRepository = new CommunityRepository();
         userRepository = new UserRepository();
+
+        // UMESTO da odmah zoveš loadFeed()
+        if (hasImagePermission()) {
+            loadFeed();
+        } else {
+            requestImagePermission();
+        }
+
+        binding.btnAttachImage.setOnClickListener(v -> {
+            if (hasImagePermission()) {
+                openImagePicker();
+            } else {
+                requestImagePermission();
+            }
+        });
 
         setupRecycler();
         setupCommunitySpinner();
@@ -134,7 +192,6 @@ public class FeedFragment extends Fragment {
 
     private void openPostDetails(Post post) {
         if (post.getId() == null) {
-            // ensure da post.id setuješ kada ga učitavaš iz Firestore-a: post.setId(doc.getId());
             return;
         }
 
@@ -197,26 +254,33 @@ public class FeedFragment extends Fragment {
     }
 
     private void createPost(User user, Community community, String title, String content) {
-        Post p = new Post();
-        p.setTitle(title);
-        p.setContent(content);
-        p.setCommunityId(community.getId());
-        p.setCommunityName(community.getName());
-        p.setUserId(user.getId());
-        p.setUserUsername(user.getUsername());
-        p.setCreatedAt(Date.from(Instant.now()));
-        p.setImageUrls(new ArrayList<>());
-        p.setUserUpvotes(new ArrayList<>());
-        p.setUserDownvotes(new ArrayList<>());
-        p.setComments(new ArrayList<>());
+        Post post = new Post();
+        post.setTitle(title);
+        post.setContent(content);
+        post.setCommunityId(community.getId());
+        post.setCommunityName(community.getName());
+        post.setUserId(user.getId());
+        post.setUserUsername(user.getUsername());
+        post.setCreatedAt(Date.from(Instant.now()));
+        post.setImageUrls(new ArrayList<>());
+        post.setUserUpvotes(new ArrayList<>());
+        post.setUserDownvotes(new ArrayList<>());
+        post.setComments(new ArrayList<>());
 
-        postRepository.createPost(p, new DbCallback<>() {
+        if (attachedImageUri != null) {
+            post.setImageUrls(List.of(attachedImageUri.toString()));
+        }
+
+        postRepository.createPost(post, new DbCallback<>() {
             @Override
             public void onSuccess(Post entity) {
                 Toast.makeText(getContext(), "Post created", Toast.LENGTH_SHORT).show();
                 // Clear inputs
                 binding.etPostTitle.setText("");
                 binding.etPostContent.setText("");
+                attachedImageUri = null;
+                binding.ivImagePreview.setImageDrawable(null);
+                binding.ivImagePreview.setVisibility(View.GONE);
                 // Reload feed or optimistically add to adapter
                 loadFeed();
             }
@@ -288,5 +352,35 @@ public class FeedFragment extends Fragment {
                 Toast.makeText(getContext(), "Failed to load feed", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private boolean hasImagePermission() {
+        String permission;
+        if (Build.VERSION.SDK_INT >= SDK_33) {
+            permission = Manifest.permission.READ_MEDIA_IMAGES;
+        } else {
+            permission = Manifest.permission.READ_EXTERNAL_STORAGE;
+        }
+
+        return ContextCompat.checkSelfPermission(requireContext(), permission)
+                == PackageManager.PERMISSION_GRANTED;
+    }
+
+    private void requestImagePermission() {
+        String permission;
+        if (Build.VERSION.SDK_INT >= SDK_33) {
+            permission = Manifest.permission.READ_MEDIA_IMAGES;
+        } else {
+            permission = Manifest.permission.READ_EXTERNAL_STORAGE;
+        }
+
+        permissionLauncher.launch(permission);
+    }
+
+    private void openImagePicker() {
+        Uri imagesUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+        Intent intent = new Intent(Intent.ACTION_PICK, imagesUri);
+        intent.setType("image/*");
+        pickImageLauncher.launch(intent);
     }
 }

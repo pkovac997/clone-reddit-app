@@ -1,5 +1,8 @@
 package com.example.redditcloneapp.ui.post.adapters;
 
+import android.net.Uri;
+import android.view.View;
+
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.redditcloneapp.databinding.ItemPostBinding;
@@ -28,6 +31,17 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
 
         int commentsCount = post.getComments() != null ? post.getComments().size() : 0;
         binding.tvCommentsCount.setText(commentsCount + " comments");
+
+        if (post.getImageUrls() != null && !post.getImageUrls().isEmpty()) {
+            var firstImage = post.getImageUrls().getFirst();
+            try {
+                Uri uri = Uri.parse(firstImage);
+                binding.ivPostImage.setVisibility(View.VISIBLE);
+                binding.ivPostImage.setImageURI(uri);
+            } catch (Exception e) {
+                binding.ivPostImage.setVisibility(View.GONE);
+            }
+        }
 
         binding.getRoot().setOnClickListener(v -> {
             if (listener != null) listener.onPostClick(post);
