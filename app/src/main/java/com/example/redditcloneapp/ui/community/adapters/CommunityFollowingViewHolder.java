@@ -4,7 +4,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.redditcloneapp.databinding.ItemCommunityFollowingBinding;
 import com.example.redditcloneapp.domain.models.Community;
-import com.example.redditcloneapp.ui.community.listeners.OnCommunityClickListener;
 import com.example.redditcloneapp.ui.community.listeners.OnCommunityFollowClickListener;
 
 public class CommunityFollowingViewHolder extends RecyclerView.ViewHolder {
@@ -29,6 +28,10 @@ public class CommunityFollowingViewHolder extends RecyclerView.ViewHolder {
 
         binding.getRoot().setOnClickListener(v -> {
             if (listener != null) listener.onCommunityClick(community);
+        });
+
+        binding.btnUnfollow.setOnClickListener(v -> {
+            if (listener != null) listener.onFollowClick(community);
         });
     }
 }

@@ -375,8 +375,26 @@ public class FirebaseDataSource {
 
                     database.collection(Community.COLLECTION_NAME)
                             .document(communityId)
-                            .set(community, SetOptions.merge())
-                            .addOnSuccessListener(x -> callback.onSuccess(community));
+                            .set(community, SetOptions.merge());
+
+                    database.collection(User.COLLECTION_NAME)
+                            .document(userId)
+                            .get()
+                            .addOnSuccessListener(snapShot -> {
+                                var user = snapShot.toObject(User.class);
+
+                                if (user.getCommunityFollows().size() == 0) {
+                                    user.setCommunityFollows(List.of(communityId));
+                                } else if (!user.getCommunityFollows().contains(communityId)) {
+                                    user.getCommunityFollows().add(communityId);
+
+                                    database.collection(User.COLLECTION_NAME)
+                                            .document(userId)
+                                            .set(user, SetOptions.merge());
+
+                                    callback.onSuccess(community);
+                                }
+                            });
                 })
                 .addOnFailureListener(callback::onError);
     }
@@ -392,12 +410,27 @@ public class FirebaseDataSource {
 
                     if (following.contains(userId)) {
                         following.remove(userId);
+
                         database.collection(Community.COLLECTION_NAME)
                                 .document(communityId)
-                                .set(community, SetOptions.merge())
-                                .addOnSuccessListener(x -> callback.onSuccess(community));
+                                .set(community, SetOptions.merge());
+
+                        database.collection(User.COLLECTION_NAME)
+                                .document(userId)
+                                .get()
+                                .addOnSuccessListener(snapShot -> {
+                                    var user = snapShot.toObject(User.class);
+
+                                    if (user.getCommunityFollows().contains(communityId)) {
+                                        user.getCommunityFollows().remove(communityId);
+
+                                        database.collection(User.COLLECTION_NAME)
+                                                .document(userId)
+                                                .set(user, SetOptions.merge())
+                                                .addOnSuccessListener(x -> callback.onSuccess(community));
+                                    }
+                                });
                     }
-                })
-                .addOnFailureListener(callback::onError);
+                }).addOnFailureListener(callback::onError);
     }
 }

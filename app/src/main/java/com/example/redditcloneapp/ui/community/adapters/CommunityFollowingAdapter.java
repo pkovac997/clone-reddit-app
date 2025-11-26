@@ -8,7 +8,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.redditcloneapp.databinding.ItemCommunityFollowingBinding;
 import com.example.redditcloneapp.domain.models.Community;
-import com.example.redditcloneapp.ui.community.listeners.OnCommunityClickListener;
 import com.example.redditcloneapp.ui.community.listeners.OnCommunityFollowClickListener;
 
 import java.util.ArrayList;

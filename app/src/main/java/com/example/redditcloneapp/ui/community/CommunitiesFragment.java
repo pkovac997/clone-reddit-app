@@ -82,7 +82,8 @@ public class CommunitiesFragment extends Fragment {
                 communityRepository.followCommunity(currentUser.getUid(), community.getId(), new DbCallback<>() {
                     @Override
                     public void onSuccess(Community entity) {
-                        Toast.makeText(getContext(),  "Followed c/" + community.getName(), Toast.LENGTH_SHORT).show();
+                        loadCommunitiesToFollow();
+                        loadCommunitiesYouFollow();
                     }
 
                     @Override
@@ -115,7 +116,8 @@ public class CommunitiesFragment extends Fragment {
                 communityRepository.unfollowCommunity(currentUser.getUid(), community.getId(), new DbCallback<>() {
                     @Override
                     public void onSuccess(Community entity) {
-                        Toast.makeText(getContext(),  "Unfollowed c/" + community.getName(), Toast.LENGTH_SHORT).show();
+                        loadCommunitiesToFollow();
+                        loadCommunitiesYouFollow();
                     }
 
                     @Override
